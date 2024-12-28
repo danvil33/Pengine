@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penguin Pixel - Secure Crypto Mining</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000; /* Black background */
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            padding: 20px;
+            margin-right: 100px; /* Shift content left */
+        }
+
+        /* Card Styling */
+        .card {
+            padding: 20px;
+            margin: auto;
+            text-align: left;
+        }
+
+        .card h1 {
+            font-size: 28px;
+            color: #f3ba2f;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-buttons {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+
+        .card-buttons a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #f3ba2f;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .card-buttons a:hover {
+            background-color: #d19f29;
+        }
+
+        /* Counter Styling */
+        #ppx-counter {
+            font-size: 20px;
+            color: #ffffff; /* White text for the counter */
+            padding: 12px 20px;
+            background: linear-gradient(to right, #222, #444); /* Black-gradient background */
+            border-radius: 8px;
+            margin-top: 20px;
+            display: inline-block;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            min-width: 150px;
+        }
+
+        /* Right-Side Icons */
+        .features-area {
+            position: fixed;
+            top: 15%;
+            right: 5%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-end;
+        }
+
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature i {
+            font-size: 24px;
+            color: #f3ba2f;
+            margin-bottom: 5px;
+        }
+
+        .feature.mining-icon i {
+            font-size: 30px;
+            color: #ff5733;
+            animation: pulse 1s infinite;
+        }
+
+        /* Animation for the "Mine" icon */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Stylish Loader */
+        .loader {
+            width: 30px;
+            height: 30px;
+            border: 5px solid #f3ba2f;
+            border-top: 5px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .features-area {
+                right: 2%;
+                top: 10%;
+            }
+
+            .container {
+                margin-right: 50px;
+            }
+
+            .card-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Card Content -->
+        <div class="card">
+            <h1>Welcome to Penguin Pixel</h1>
+            <p>
+                Penguin Pixel is the future of cryptocurrency mining, offering cutting-edge solutions to simplify the mining process. 
+                Our platform is designed to cater to both beginners and seasoned miners, ensuring a secure and efficient experience.
+            </p>
+            <p>
+                With state-of-the-art security features, referral rewards, and intuitive wallet management, we empower users to mine 
+                their favorite cryptocurrencies effortlessly. Join us today and become part of the digital financial revolution.
+            </p>
+            <div class="card-buttons">
+                <a href="#">
+                    <i class="fas fa-file-alt"></i> White Paper
+                </a>
+            </div>
+            <div id="ppx-counter">
+                0.0000 ppx
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Icons Area (Right Side) -->
+    <div class="features-area">
+        <div class="feature">
+            <i class="fas fa-user-shield"></i>
+            <span>Security</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-gift"></i>
+            <span>Referral</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-wallet"></i>
+            <span>Wallet</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-cogs"></i>
+            <span>Settings</span>
+        </div>
+        <div class="feature mining-icon" id="mine-icon">
+            <i class="fas fa-hammer"></i>
+            <span id="mine-text">Mine</span>
+            <span id="mining-rate" style="color: #f3ba2f; display: none;">2 ppx/h</span> <!-- Initially hidden -->
+        </div>
+    </div>
+
+    <script>
+        const rate = 2 / 3600; // Mining rate (2 ppx per hour converted to per second)
+        const counterDisplay = document.getElementById('ppx-counter');
+        const mineIcon = document.getElementById('mine-icon');
+        const mineText = document.getElementById('mine-text'); // Reference to Mine text
+        const miningRate = document.getElementById('mining-rate'); // Reference to mining rate
+        let ppxCounter = parseFloat(localStorage.getItem('ppxCounter')) || 0;
+        let startTime = parseFloat(localStorage.getItem('startTime')) || null;
+        let miningInterval;
+
+        // Update counter and calculate based on elapsed time
+        function updateCounter() {
+            if (startTime) {
+                const elapsedTime = (Date.now() - startTime) / 1000; // Elapsed time in seconds
+                ppxCounter += elapsedTime * rate;
+                localStorage.setItem('ppxCounter', ppxCounter.toFixed(4));
+                startTime = Date.now(); // Reset start time
+                localStorage.setItem('startTime', startTime);
+            }
+            counterDisplay.textContent = ppxCounter.toFixed(4) + ' ppx';
+        }
+
+        // Start mining process
+        function startMining() {
+            if (miningInterval) return; // Prevent multiple sessions
+            startTime = Date.now();
+            localStorage.setItem('startTime', startTime);
+
+            miningInterval = setInterval(() => {
+                updateCounter();
+            }, 1000); // Update every second
+
+            // Change the counter color to yellow when mining starts
+            counterDisplay.style.color = '#f3ba2f';  // Yellow color
+
+            // Change the "Mine" icon color to yellow
+            mineIcon.querySelector('i').style.color = '#f3ba2f';  // Yellow color
+
+            // Hide the "Mine" text and show the mining rate once mining starts
+            mineText.style.display = 'none';
+            miningRate.style.display = 'inline';  // Show the mining rate
+        }
+
+        // Click event to start mining
+        mineIcon.addEventListener('click', () => {
+            startMining();
+        });
+
+        // Initialize the counter on page load
+        updateCounter();
+    </script>
+</body>
+</html>
